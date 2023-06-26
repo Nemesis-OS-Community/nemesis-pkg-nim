@@ -14,6 +14,7 @@ Both package managers are good in their own right, but currently, this package m
 | History                 | yes             | yes         |
 | Configuration           | TOML file       | Python file |
 | Git and ZIP support     | yes, via zippy  | no          |
+| Parallel downloads/sync | partial/WIP     | no          |
 
 # Pros
 nemesis-pkg:
@@ -22,8 +23,8 @@ nemesis-pkg:
 nemesis-pkg-nim:
 - leaps faster
 - configurable via TOML, which is nice to work with
-- true parallelism (in the future)
-- directly calls into libcurl via [curly](https://github.com/guzba/curly)
+- parallelized for the most part
+- directly calls into libcurl via [curly](https://github.com/guzba/curly) for as less overhead as possible
 
 # Cons
 nemesis-pkg:

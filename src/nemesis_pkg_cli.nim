@@ -1,7 +1,7 @@
-import std/[strformat, strutils, os], 
+import std/[strformat, strutils, os, osproc], 
     utils, syncrepos, history, colors, 
     uninstallpkg, repolist, installlist, 
-    installpkg, buildfilesmgr
+    installpkg, buildfilesmgr, searchrepos
 
 #[
   Shows the help menu. Self explanatory.  
@@ -10,8 +10,10 @@ proc showHelp =
   echo "usage: nemesis-pkg [options] [arguments]"
   echo "install <pkg>\tinstall a package"
   echo "uninstall <pkg>\tremove a package"
+  echo "search <pkg>\tsearch for a package"
   echo "sync\t\tsynchronize package databases"
   echo "repo-ls\t\tlist all packages in all repositories"
+  echo "installed-ls\tlist all installed packages"
   echo "update\t\tupdate all packages from current database"
   echo "upgrade\t\tsync databases and perform an update"
 
@@ -50,6 +52,14 @@ proc userTermination* {.noconv.} =
   quit 1
 
 #[
+  Open the history file in the user's preferred text
+  editor.
+]#
+proc nemesisShowHistory* =
+  echo fmt"{GREEN}info{RESET}: opening history in your text editor."
+  discard execCmd("sudo $EDITOR /root/.nemesis-pkg_history")
+
+#[
   Entry point for the program.
 ]#  
 proc main =
@@ -74,6 +84,10 @@ proc main =
     nemesisInstalledList()
   elif action.toLowerAscii() == "show-history":
     nemesisShowHistory()
+  elif action.toLowerAscii() == "search":
+    nemesisSearchPackage(getPackageArg())
+  elif action.toLowerAscii() == "popipo":
+    echo fmt"{GREEN}🎵wE aRe vEgEtArIa-A-A-A-A-A-A-A-n🎵{RESET}"
   else:
     showHelp()
 
