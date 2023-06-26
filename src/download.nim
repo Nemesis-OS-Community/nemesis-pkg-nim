@@ -2,6 +2,9 @@ import std/[osproc, strformat, strutils], zippy/ziparchives, uuids, curly, confi
 
 proc downloadSource*(url: string): string =
  let
+  pool = newCurlPool(
+   getConfig().getTable()["download"].getTable()["workers"].getInt()
+  )
   isTar = url.endsWith(".tar.xz") or url.endsWith(".tar.gz") or url.endsWith(".tar")
   isZip = url.endsWith(".zip")
   storePath = getConfig().getTable()["build"].getTable()
@@ -22,7 +25,7 @@ proc downloadSource*(url: string): string =
   let file = open(path, fmWrite)
   defer: file.close()
 
-  let data = newCurlPool(1).get(url).body
+  let data = pool.get(url).body
   file.write(
    data
   )
