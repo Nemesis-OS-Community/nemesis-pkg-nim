@@ -6,7 +6,7 @@ package manager winning by 1 vote, hence this will stand as an alternative to ne
 Both package managers are good in their own right, but currently, this package manager is more feature rich.
 | Feature                 | nemesis-pkg-nim | nemesis-pkg |
 | ----------------------- | --------------- | ----------- |
-| Install                 | yes             | no          |
+| Install                 | yes             | partially/WIP          |
 | Uninstall               | yes             | no          |
 | Sync repos              | yes             | yes         |
 | List online packages    | yes             | yes          |
