@@ -1,6 +1,6 @@
 import colors, config, parsetoml, std/[os, strformat, strutils]
 
-proc nemesisClearBuildFiles* =
+proc nemesisClearBuildFiles* {.inline.} =
  var counter: int = 0
  for kind, path in walkDir(getConfig()["build"]["files_path"].getStr()):
   if dirExists(path):
