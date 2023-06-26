@@ -1,4 +1,8 @@
-import config, history, curly, databases, parsetoml, colors, std/[tables, strformat, strutils]
+{.experimental.}
+
+import config, history, curly, databases, 
+       parsetoml, colors, 
+       std/[tables, strformat, strutils, threadpool]
 
 proc synchronize(name, url: string, curlpool: CurlPool) =
  echo fmt"{GREEN}{name}{RESET}: {url}"
@@ -40,14 +44,21 @@ proc synchronize(name, url: string, curlpool: CurlPool) =
  writeHistory(fmt"Saved package databases for repository '{name}'")
  echo fmt"{GREEN}{name}{RESET}: saved package database!"
 
-proc nemesisSync*() =
+proc parrSynchronize(name, url: string, pool: CurlPool) {.inline.} =
+ when defined(nemesisPkgNoParallel):
+  synchronize(name, url, pool)
+ else:
+  parallel:
+   spawn synchronize(name, url, pool)
+
+proc nemesisSync*() {.inline.} =
  writeHistory("sync package databases")
  let repos = getConfig()["repos"]
      .getTable()
 
- let pool = newCurlPool(3)
+ let pool = newCurlPool(8)
  
  echo fmt"{GREEN}info{RESET}: synchronizing package databases"
 
  for reponame, repourl in repos:
-  synchronize(reponame, repourl.getStr(), pool)
+  parrSynchronize(reponame, repourl.getStr(), pool)
