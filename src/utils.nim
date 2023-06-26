@@ -7,7 +7,7 @@ const ROOT_REQUIRED_ACTIONS = @[
  "clear-build-files"
 ]
 
-proc actionRequiresRoot*(action: string): bool {.inline.} =
+proc requiresRoot*(action: string): bool {.inline.} =
  action in ROOT_REQUIRED_ACTIONS
 
 proc getRawURLForPackage*(pkg: string, repo: string): string {.inline.} =
