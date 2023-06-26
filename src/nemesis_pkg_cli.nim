@@ -3,6 +3,9 @@ import std/[strformat, strutils, os],
     uninstallpkg, repolist, installlist, 
     installpkg, buildfilesmgr
 
+#[
+  Shows the help menu. Self explanatory.  
+]#
 proc showHelp =
   echo "usage: nemesis-pkg [options] [arguments]"
   echo "install <pkg>\tinstall a package"
@@ -12,6 +15,13 @@ proc showHelp =
   echo "update\t\tupdate all packages from current database"
   echo "upgrade\t\tsync databases and perform an update"
 
+#[
+  Get the action, for eg.
+  nemesis-pkg install
+              ^^^^^^^
+                |
+              action
+]#
 proc getAction: string =
   if paramCount() > 0:
     paramStr(1)
@@ -19,6 +29,10 @@ proc getAction: string =
     showHelp()
     quit 1
 
+#[
+  Get the package argument, only triggered when an
+  action such as install or uninstall is to be executed.
+]#
 proc getPackageArg: string =
   if paramCount() > 1:
     paramStr(2)
@@ -26,21 +40,23 @@ proc getPackageArg: string =
     showHelp()
     quit 1
 
-proc nemesisUninstall* =
-  let pkgName = getPackageArg()
-  writeHistory(fmt"install {pkgName}")
-  echo fmt"{RED}error{RESET}: this feature is not yet implemented. :("
-  quit 0
-
+#[
+  Triggered when CTRL+C is pressed.
+  Shows a nice error message rather than an ugly 
+  traceback, or worse, just a confusing error in release mode.
+]#
 proc userTermination* {.noconv.} =
   echo fmt"{RED}error{RESET}: process manually terminated by user."
   quit 1
-  
+
+#[
+  Entry point for the program.
+]#  
 proc main =
   setControlCHook(userTermination)
   let action = getAction()
 
-  if action.actionRequiresRoot() and not isAdmin():
+  if action.requiresRoot() and not isAdmin():
     echo fmt"{RED}error{RESET}: this action requires superuser privileges (under the root user on most systems)."
     quit 1
 
@@ -56,6 +72,8 @@ proc main =
     nemesisRepositoryList()
   elif action.toLowerAscii() == "installed-ls":
     nemesisInstalledList()
+  elif action.toLowerAscii() == "show-history":
+    nemesisShowHistory()
   else:
     showHelp()
 
