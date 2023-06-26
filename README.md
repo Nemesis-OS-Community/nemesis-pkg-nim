@@ -13,6 +13,7 @@ Both package managers are good in their own right, but currently, this package m
 | List installed packages | yes             | no          |
 | History                 | yes             | yes         |
 | Configuration           | TOML file       | Python file |
+| Git and ZIP support     | yes, via zippy  | no          |
 
 # Pros
 nemesis-pkg:
