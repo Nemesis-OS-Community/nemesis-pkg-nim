@@ -9,7 +9,7 @@ Both package managers are good in their own right, but currently, this package m
 | Install                 | yes             | no          |
 | Uninstall               | yes             | no          |
 | Sync repos              | yes             | yes         |
-| List online packages    | yes             | WIP          |
+| List online packages    | yes             | yes          |
 | List installed packages | yes             | no          |
 | History                 | yes             | yes         |
 | Configuration           | TOML file       | Python file |
